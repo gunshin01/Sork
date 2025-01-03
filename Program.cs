@@ -2,19 +2,100 @@
 {
     public static void Main(string[] args)
     {
+        ICommand lol = new LaughCommand();
+        ICommand exit = new ExitCommand();
+        ICommand dance = new DanceCommand();
+        ICommand sing = new SingCommand();
+        ICommand whistle = new WhistleCommand();
+        List<ICommand> commands = new List<ICommand> { lol, exit, dance, sing, whistle };
         do
+
         {
             Console.Write(" > ");
             string input = Console.ReadLine();
             input = input.ToLower();
             input = input.Trim();
-            if (input == "lol") { Console.WriteLine("You Laughed out Loud!"); }
-            else if (input == "exit") { break; }
-            else if (input == "dance") { Console.WriteLine("Dance, Dance, We're falling apart to half the time!"); }
-            else if (input == "sing") { Console.WriteLine("I Love to sing! She recently confessed to me, by the way I have a recording of her lovely singing voice."); }
-            else if (input == "whistle") { Console.WriteLine("Come on somebody, why don't you run? Ol'Reds itching to have a little fun!"); }
-            else { Console.WriteLine("I can't do that Hal..."); }
+            var result = new CommandResult{ RequestExit = false, IsHandled = false };
+            var handled = false;
+            foreach (var command in commands)
+            {
+                if (command.Handles(input)) 
+                { 
+                    handled = true;
+                    result = command.Execute();
+                    if(result.RequestExit){ break; } 
+                    
+                }
+            }
+            if (!handled) { Console.WriteLine("I can't do that Hal..."); }
+            if (result.RequestExit) { break; }
         } while (true);
     }
 }
 
+
+public interface ICommand
+{
+    bool Handles(string userInput);
+    CommandResult Execute();
+}
+
+public class ExitCommand : ICommand
+{
+    public bool Handles(string userInput) => userInput == "exit";
+    public CommandResult Execute() => new CommandResult { RequestExit = true, IsHandled = true };
+}
+
+public class CommandResult
+{
+    public bool RequestExit { get; set; }
+    public bool IsHandled { get; set; }
+}
+
+
+public class DanceCommand : ICommand
+{
+    public bool Handles(string userInput) => userInput == "dance";
+    public CommandResult Execute()
+    {
+        Console.WriteLine("Dance, Dance, We're falling apart to half the time!");
+        return new CommandResult { RequestExit = false, IsHandled = true };
+    }
+}
+
+public class SingCommand : ICommand
+{
+    public bool Handles(string userInput) => userInput == "sing";
+    public CommandResult Execute()
+    {
+        Console.WriteLine("I Love to sing! She recently confessed to me, by the way I have a recording of her lovely singing voice.");
+        return new CommandResult { RequestExit = false, IsHandled = true };
+    }
+}
+
+public class WhistleCommand : ICommand
+{
+    public bool Handles(string userInput) => userInput == "whistle";
+    public CommandResult Execute()
+    {
+        Console.WriteLine("Come on somebody, why don't you run? Ol'Reds itching to have a little fun!");
+        return new CommandResult { RequestExit = false, IsHandled = true };
+    }
+    
+}
+
+
+public class LaughCommand : ICommand
+{
+    public bool Handles(string userInput)
+    {
+        return userInput == "lol";
+    }
+    
+
+    public CommandResult Execute()
+    {
+        Console.WriteLine("You Laughed out Loud!");
+        return new CommandResult { RequestExit = false, IsHandled = true };
+    }
+}
