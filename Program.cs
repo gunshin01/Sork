@@ -1,4 +1,5 @@
-﻿public class Program
+﻿namespace Sork;
+public class Program
 {
     public static void Main(string[] args)
     {
@@ -8,8 +9,8 @@
         ICommand sing = new SingCommand();
         ICommand whistle = new WhistleCommand();
         List<ICommand> commands = new List<ICommand> { lol, exit, dance, sing, whistle };
+        
         do
-
         {
             Console.Write(" > ");
             string input = Console.ReadLine();
