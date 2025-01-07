@@ -1,5 +1,5 @@
 namespace Sork.Commands;
-
+using Sork.World;
 public class SingCommand : BaseCommand
 {
     private readonly UserInputOutput io;
@@ -7,10 +7,13 @@ public class SingCommand : BaseCommand
     {
         this.io = io;
     }
-    public override bool Handles(string userInput) => GetCommandFromInput(userInput) == "sing";
-    public override CommandResult Execute()
+    public override bool Handles(string userInput) 
     {
-        Console.WriteLine("I Love to sing! She recently confessed to me, by the way I have a recording of her lovely singing voice.");
+        return GetCommandFromInput(userInput) == "sing";
+    }
+    public override CommandResult Execute(string userInput, GameState gameState)
+    {
+        io.WriteMessageLine("I Love to sing! She recently confessed to me, by the way I have a recording of her lovely singing voice.");
         return new CommandResult { RequestExit = false, IsHandled = true };
     }
 }
