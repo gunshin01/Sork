@@ -44,7 +44,7 @@ public class UserInputOutput
 {
     public void WritePrompt(string prompt) 
     {
-        Console.ForegroundColor = ConsoleColor.DarkRed;
+        Console.ForegroundColor = ConsoleColor.DarkBlue;
         Console.Write(prompt);
         Console.ResetColor();
     }

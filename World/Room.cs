@@ -12,7 +12,7 @@ public class Room
             return "You see no exits, You're trapped!";
             
         var exitList = Exits
-            .Select(exit => $"{exit.Key} to the {exit.Value.Name}")
+            .Select(exit => $"{exit.Key}")
             .ToList();
             
         return exitList.Count == 1 

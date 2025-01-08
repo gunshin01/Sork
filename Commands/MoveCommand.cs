@@ -16,7 +16,7 @@ public class MoveCommand : BaseCommand
     {
         var direction = GetParametersFromInput(userInput)[0].ToLower();
         gameState.Player.Location = gameState.Player.Location.Exits[direction];
-        io.WriteMessageLine($"You move to {gameState.Player.Location.Name}.");
+        io.WriteMessageLine($"You enter the {gameState.Player.Location.Name}.");
         return new CommandResult { RequestExit = false, IsHandled = true };
     }
 }

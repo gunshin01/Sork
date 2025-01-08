@@ -32,7 +32,12 @@ public class GameState
         dungeon.Description = $"{dungeon.Description} You look for an exit and see doors to the {dungeon.GetExitsList()}.";
         cellar.Description = $"{cellar.Description} {cellar.GetExitsList()}";
 
-        io.WritePrompt("What is your name?");
+        io.WritePrompt($@"Navigation Commands:
+- Look: See your surroundings
+- Move [direction]: Move in specified direction
+
+What is your name? ");
+
         string name = io.ReadInput();
         var player = new Player { Name = name, Location = tavern };
         return new GameState { Player = player, RootRoom = tavern };
