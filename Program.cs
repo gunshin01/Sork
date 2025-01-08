@@ -13,7 +13,8 @@ public class Program
         ICommand sing = new SingCommand(io);
         ICommand whistle = new WhistleCommand(io);
         ICommand move = new MoveCommand(io);
-        List<ICommand> commands = new List<ICommand> { lol, exit, dance, sing, whistle, move };
+        ICommand look = new LookCommand(io);
+        List<ICommand> commands = new List<ICommand> { lol, exit, dance, sing, whistle, move, look };
         
         do
         {
@@ -33,7 +34,7 @@ public class Program
                     
                 }
             }
-            if (!handled) { io.WriteMessageLine("I can't do that Hal..."); }
+            if (!handled) { io.WriteMessageLine($"I can't do that {gameState.Player.Name}..."); }
             if (result.RequestExit) { break; }
         } while (true);
     }
