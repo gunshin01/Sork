@@ -1,20 +1,26 @@
-﻿using Sork.Commands;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Sork.Commands;
 using Sork.World;
 namespace Sork;
 public class Program
 {
+    
     public static void Main(string[] args)
     {
-        UserInputOutput io = new UserInputOutput();
-        var gameState = GameState.Create(io);
-        ICommand lol = new LaughCommand(io);
-        ICommand exit = new ExitCommand(io);
-        ICommand dance = new DanceCommand(io);
-        ICommand sing = new SingCommand(io);
-        ICommand whistle = new WhistleCommand(io);
-        ICommand move = new MoveCommand(io);
-        ICommand look = new LookCommand(io);
-        List<ICommand> commands = new List<ICommand> { lol, exit, dance, sing, whistle, move, look };
+        var services = new ServiceCollection();
+        services.AddSingleton<UserInputOutput>();
+        services.AddSingleton<GameState>(sp => GameState.Create(sp.GetRequiredService<UserInputOutput>()));
+        var commandTypes = typeof(ICommand).Assembly.GetTypes()
+            .Where(t=> typeof(ICommand).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract);
+        foreach (var commandType in commandTypes)
+        {
+            services.AddSingleton(typeof(ICommand), commandType);
+        }
+        var serviceProvider = services.BuildServiceProvider();
+        var gameState = serviceProvider.GetRequiredService<GameState>();
+        var commands = serviceProvider.GetServices<ICommand>().ToList();
+        var io = serviceProvider.GetRequiredService<UserInputOutput>();
+
         
         do
         {
