@@ -8,7 +8,7 @@ public class Program
     public static void Main(string[] args)
     {
         var services = new ServiceCollection();
-        services.AddSingleton<UserInputOutput>();
+        services.AddSingleton<IUserInputOutput, UserInputOutput>();
         services.AddSingleton<GameState>(sp => GameState.Create(sp.GetRequiredService<UserInputOutput>()));
         var commandTypes = typeof(ICommand).Assembly.GetTypes()
             .Where(t=> typeof(ICommand).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract);
@@ -19,7 +19,7 @@ public class Program
         var serviceProvider = services.BuildServiceProvider();
         var gameState = serviceProvider.GetRequiredService<GameState>();
         var commands = serviceProvider.GetServices<ICommand>().ToList();
-        var io = serviceProvider.GetRequiredService<UserInputOutput>();
+        var io = serviceProvider.GetRequiredService<IUserInputOutput>();
 
         
         do
@@ -46,42 +46,7 @@ public class Program
     }
 }
 
-public class UserInputOutput
-{
-    public void WritePrompt(string prompt) 
-    {
-        Console.ForegroundColor = ConsoleColor.DarkBlue;
-        Console.Write(prompt);
-        Console.ResetColor();
-    }
-    public void WriteMessage(string message) 
-    {
-        Console.ForegroundColor = ConsoleColor.DarkCyan;
-        Console.Write(message);
-        Console.ResetColor();
 
-    }
-    public void WriteNoun(string noun) 
-    {
-        Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.Write(noun);
-        Console.ResetColor();
-    }
-    public void WriteMessageLine(string message) 
-    {
-        Console.ForegroundColor = ConsoleColor.DarkMagenta;
-        Console.WriteLine(message);
-        Console.ResetColor();
-    }
-    public string ReadInput() 
-    {
-        return Console.ReadLine().Trim();
-    }
-    public string ReadKey() 
-    {
-        return Console.ReadKey().KeyChar.ToString();
-    }
-}
 
 
 

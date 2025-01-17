@@ -2,8 +2,8 @@ namespace Sork.Commands;
 using Sork.World;
 public class WhistleCommand : BaseCommand
 {   
-    private readonly UserInputOutput io;
-    public WhistleCommand(UserInputOutput io)
+    private readonly IUserInputOutput io;
+    public WhistleCommand(IUserInputOutput io)
     {
         this.io = io;
     }
