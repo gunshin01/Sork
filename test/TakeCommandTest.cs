@@ -16,7 +16,7 @@ public sealed class TakeCommandsTests
     }
 
     [TestMethod]
-    public void Execute_ShouldOutputError_WhenNoParameters()
+    public void Execute_ShouldOutputMessage_WhenNoParameters()
     {
         //Arrange
         var io = new TestInputOutput();

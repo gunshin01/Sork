@@ -1,16 +1,16 @@
-﻿namespace Sork.Tests;
+namespace Sork.Tests;
 using Sork.Commands;
 using Sork.World;
 [TestClass]
-public sealed class LaughCommandsTests
+public sealed class ExitCommandsTests
 {
     [TestMethod]
     public void Handle_ShouldReturnTrue_WhenInputIsCapitalized()
     {
         //Arrange
-        var command = new LaughCommand(new UserInputOutput());
+        var command = new ExitCommand(new UserInputOutput());
         //Act
-        var result = command.Handles("LOL");
+        var result = command.Handles("EXIT");
         //Assert
         Assert.IsTrue(result);
     }
@@ -18,9 +18,9 @@ public sealed class LaughCommandsTests
     public void Handle_ShouldReturnTrue_WhenLowercaseInputIsProvided()
     {
         //Arrange
-        var command = new LaughCommand(new UserInputOutput());
+        var command = new ExitCommand(new UserInputOutput());
         //Act
-        var result = command.Handles("lol");
+        var result = command.Handles("exit");
         //Assert
         Assert.IsTrue(result);
     }
@@ -30,15 +30,12 @@ public sealed class LaughCommandsTests
     {
         //Arrange
         var io = new TestInputOutput();
-        var command = new LaughCommand(io);
+        var command = new ExitCommand(io);
         var gameState = GameState.Create(io);
         //Act
-        var result = command.Execute("LAUGH", gameState);
+        var result = command.Execute("EXIT", gameState);
         //Assert
         Assert.IsTrue(result.IsHandled);
-        Assert.IsFalse(result.RequestExit);
-        Assert.AreEqual(2, io.Outputs.Count);
-        Assert.AreEqual("You", io.Outputs[0]);
-        Assert.AreEqual(" Laughed out Loud!", io.Outputs[1]);
+        Assert.IsTrue(result.RequestExit);
     }
 }

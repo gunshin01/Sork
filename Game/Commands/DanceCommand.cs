@@ -24,6 +24,7 @@ public class DanceCommand : BaseCommand
         {
             io.WriteNoun("You");
             io.WriteMessageLine(" Dance!");
+            return new CommandResult() {IsHandled = false, RequestExit = false};
         }
         else 
         {
