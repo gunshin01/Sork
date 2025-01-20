@@ -5,6 +5,7 @@ public class Room
     public required string Name { get; set; }
     public required string Description { get; set; }
     public Dictionary<string, Room> Exits { get; set; } = new Dictionary<string, Room>();
+    public List<Item> Inventory { get; } = new();
 
     public string GetExitsList()
     {

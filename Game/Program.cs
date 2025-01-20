@@ -8,7 +8,8 @@ public class Program
     public static void Main(string[] args)
     {
         var services = new ServiceCollection();
-        services.AddSingleton<IUserInputOutput, UserInputOutput>();
+        services.AddSingleton<UserInputOutput>();
+        services.AddSingleton<IUserInputOutput>(sp => sp.GetRequiredService<UserInputOutput>());
         services.AddSingleton<GameState>(sp => GameState.Create(sp.GetRequiredService<UserInputOutput>()));
         var commandTypes = typeof(ICommand).Assembly.GetTypes()
             .Where(t=> typeof(ICommand).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract);

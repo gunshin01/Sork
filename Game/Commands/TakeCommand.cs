@@ -19,6 +19,16 @@ public class TakeCommand : BaseCommand
             io.WriteMessageLine("What do you want to take?");
             return new CommandResult() {IsHandled = false, RequestExit = false};
         }
+
+        var item = gameState.Player.Location.Inventory.FirstOrDefault(item => item.Name.ToLower() == parameters[0].ToLower());
+        if (item == null)
+        {
+            io.WriteMessageLine("You don't see that here.");
+            return new CommandResult() {IsHandled = false, RequestExit = false};
+        }
+        gameState.Player.Inventory.Add(item);
+        gameState.Player.Location.Inventory.Remove(item);
+
         return new CommandResult() {IsHandled = true, RequestExit = false};
     }
 }

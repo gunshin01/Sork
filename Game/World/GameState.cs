@@ -22,6 +22,8 @@ public class GameState
             Name = "Cellar",
             Description = "A damp cellar filled with barrels and a musty smell. You hear a whooshing sound behind you. The door has disappeared!"
         };
+        var sword = new Item { Name = "Sword", Description = "A shiny sword." };
+        tavern.Inventory.Add(sword);
         
         tavern.Exits.Add("right", dungeon);
         dungeon.Exits.Add("left", tavern);

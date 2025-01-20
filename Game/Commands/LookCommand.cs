@@ -1,19 +1,33 @@
 namespace Sork.Commands;
 using Sork.World;
-public class LookCommand : BaseCommand
+using System.Linq;
+
+public class LookCommand : ICommand
 {
-    private readonly IUserInputOutput io;
+    private readonly IUserInputOutput _io;
+
     public LookCommand(IUserInputOutput io)
     {
-        this.io = io;
+        _io = io;
     }
-    public override bool Handles(string userInput)
+
+    public bool Handles(string input)
     {
-        return GetCommandFromInput(userInput) == "look";
+        return input.Equals("look", StringComparison.OrdinalIgnoreCase);
     }
-    public override CommandResult Execute(string userInput, GameState gameState)
+
+    public CommandResult Execute(string input, GameState gameState)
     {
-        io.WriteMessageLine(gameState.Player.Location.Description);
-        return new CommandResult { RequestExit = false, IsHandled = true };
+        // Output the location description
+        _io.WriteMessageLine(gameState.Player.Location.Description);
+        
+        // Output the inventory
+        var inventory = gameState.Player.Location.Inventory.FirstOrDefault();
+        if (inventory != null)
+        {
+            _io.WriteMessageLine($"You are carrying: {inventory.Name}");
+        }
+
+        return new CommandResult { IsHandled = true, RequestExit = false };
     }
 }
