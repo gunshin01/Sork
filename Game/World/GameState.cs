@@ -2,46 +2,24 @@ namespace Sork.World;
 
 public class GameState
 {
-    public required Player Player { get; set; }
+    public List<Player> Players { get; set; } = [];
     public required Room RootRoom { get; set; }
 
-    public static GameState Create(IUserInputOutput io)
+    public static GameState Create()
     {
-        var tavern = new Room 
-        { 
-            Name = "Tavern", 
-            Description = "You are in the tavern, it is dark, full of smoke and drunk patrons." 
-        };
-        var dungeon = new Room 
-        { 
-            Name = "Dungeon", 
-            Description = "The dungeon is dark and cold." 
-        };
-        var cellar = new Room
-        {
-            Name = "Cellar",
-            Description = "A damp cellar filled with barrels and a musty smell. You hear a whooshing sound behind you. The door has disappeared!"
-        };
-        var sword = new Item { Name = "Sword", Description = "A shiny sword." };
+        var tavern = new Room { Name = "Tavern", Description = "You are in the Tavern." };
+        var dungeon = new Room { Name = "Dungeon", Description = "You are in the dungeon." };
+
+        var sword = new Item { Name = "Sword", Description = "A sword." };
+        var mug = new Item { Name = "Mug", Description = "A mug." };
+
+        tavern.Inventory.Add(mug);
         tavern.Inventory.Add(sword);
+
+        tavern.Exits.Add("down", dungeon);
+        dungeon.Exits.Add("up", tavern);
         
-        tavern.Exits.Add("right", dungeon);
-        dungeon.Exits.Add("left", tavern);
-        dungeon.Exits.Add("straight", cellar);
-
-        // Update descriptions with exits
-        tavern.Description = $"{tavern.Description} You look for an exit and see a door to the {tavern.GetExitsList()}.";
-        dungeon.Description = $"{dungeon.Description} You look for an exit and see doors to the {dungeon.GetExitsList()}.";
-        cellar.Description = $"{cellar.Description} {cellar.GetExitsList()}";
-
-        io.WritePrompt($@"Navigation Commands:
-- Look: See your surroundings
-- Move [direction]: Move in specified direction
-
-What is your name? ");
-
-        string name = io.ReadInput();
-        var player = new Player { Name = name, Location = tavern };
-        return new GameState { Player = player, RootRoom = tavern };
+        return new GameState { RootRoom = tavern };
     }
 }
+

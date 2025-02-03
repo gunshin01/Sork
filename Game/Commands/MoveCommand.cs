@@ -1,7 +1,6 @@
 namespace Sork.Commands;
 using Sork.World;
 public class MoveCommand : BaseCommand
-
 {
     private readonly IUserInputOutput io;
     public MoveCommand(IUserInputOutput io)
@@ -12,11 +11,11 @@ public class MoveCommand : BaseCommand
     {
         return GetCommandFromInput(userInput) == "move" && GetParametersFromInput(userInput).Length == 1;
     }
-    public override CommandResult Execute(string userInput, GameState gameState)
+    public override CommandResult Execute(string userInput, Player player)
     {
         var direction = GetParametersFromInput(userInput)[0].ToLower();
-        gameState.Player.Location = gameState.Player.Location.Exits[direction];
-        io.WriteMessageLine($"You enter the {gameState.Player.Location.Name}.");
+        player.Location.MovePlayer(player, direction);
+        io.WriteMessageLine($"You move to {player.Location.Name}.");
         return new CommandResult { RequestExit = false, IsHandled = true };
     }
 }

@@ -1,9 +1,5 @@
-using System.Reflection.Metadata.Ecma335;
-using Microsoft.VisualBasic;
-using Sork.World;
-
 namespace Sork.Commands;
-
+using Sork.World;
 public class DanceCommand : BaseCommand
 {
     private readonly IUserInputOutput io;
@@ -11,28 +7,22 @@ public class DanceCommand : BaseCommand
     {
         this.io = io;
     }
-    public override bool Handles(string userInput) 
-    {
-        var parmsLength = GetParametersFromInput(userInput).Length;
-        return GetCommandFromInput(userInput) == "dance" && (parmsLength == 0 || parmsLength == 1);
+    public override bool Handles(string userInput) {
+        var paramsLength = GetParametersFromInput(userInput).Length;
+        return GetCommandFromInput(userInput) == "dance" && (paramsLength == 0 || paramsLength == 1);
     }
-    
-    public override CommandResult Execute(string userInput, GameState gameState)
-    {
+    public override CommandResult Execute(string userInput, Player player) 
+    { 
         var parameters = GetParametersFromInput(userInput);
-        if (parameters.Length == 0)
-        {
+        if (parameters.Length == 0) {
             io.WriteNoun("You");
-            io.WriteMessageLine(" Dance!");
-            return new CommandResult() {IsHandled = false, RequestExit = false};
-        }
-        else 
-        {
+            io.WriteMessageLine(" dance!"); 
+        } else {
             io.WriteNoun("You");
-            io.WriteMessage(" Dance with ");
+            io.WriteMessage(" dance with ");
             io.WriteNoun(parameters[0]);
-            io.WriteMessageLine("!");
+            io.WriteMessageLine("!"); 
         }
-        return new CommandResult { RequestExit = false, IsHandled = true };
+        return new CommandResult { RequestExit = false, IsHandled = true }; 
     }
 }

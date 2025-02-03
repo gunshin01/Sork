@@ -11,12 +11,12 @@ public class LaughCommand : BaseCommand
     {
         return GetCommandFromInput(userInput) == "lol";
     }
-    
 
-    public override CommandResult Execute(string userInput, GameState gameState)
+    public override CommandResult Execute(string userInput, Player player)
     {
         io.WriteNoun("You");
-        io.WriteMessageLine(" Laughed out Loud!");
+        io.WriteMessageLine(" laugh out loud!");
+
         return new CommandResult { RequestExit = false, IsHandled = true };
     }
 }

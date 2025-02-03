@@ -1,20 +1,19 @@
-namespace Sork.Commands;
 using Sork.World;
+
+namespace Sork.Commands;
+
 public class WhistleCommand : BaseCommand
-{   
+{
     private readonly IUserInputOutput io;
     public WhistleCommand(IUserInputOutput io)
     {
         this.io = io;
     }
-    public override bool Handles(string userInput) 
+    public override bool Handles(string userInput) => GetCommandFromInput(userInput) == "whistle";
+    public override CommandResult Execute(string userInput, Player player)
     {
-        return GetCommandFromInput(userInput) == "whistle";
-    }
-    public override CommandResult Execute(string userInput, GameState gameState)
-    {
-        io.WriteMessageLine("Come on somebody, why don't you run? Ol'Reds itching to have a little fun!");
+        io.WriteNoun("You");
+        io.WriteMessageLine(" whistle!");
         return new CommandResult { RequestExit = false, IsHandled = true };
     }
-    
 }

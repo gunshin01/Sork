@@ -1,33 +1,46 @@
-namespace Sork.Commands;
 using Sork.World;
-using System.Linq;
 
-public class LookCommand : ICommand
+namespace Sork.Commands;
+
+public class LookCommand : BaseCommand
 {
-    private readonly IUserInputOutput _io;
-
-    public LookCommand(IUserInputOutput io)
+    private readonly IUserInputOutput io;
+    private readonly GameState gameState;
+    public LookCommand(IUserInputOutput io, GameState gameState)
     {
-        _io = io;
+        this.io = io;
+        this.gameState = gameState;
     }
 
-    public bool Handles(string input)
+    public override bool Handles(string userInput)
     {
-        return input.Equals("look", StringComparison.OrdinalIgnoreCase);
+        return GetCommandFromInput(userInput) == "look";
     }
 
-    public CommandResult Execute(string input, GameState gameState)
+    public override CommandResult Execute(string userInput, Player player)
     {
-        // Output the location description
-        _io.WriteMessageLine(gameState.Player.Location.Description);
-        
-        // Output the inventory
-        var inventory = gameState.Player.Location.Inventory.FirstOrDefault();
-        if (inventory != null)
+        io.WriteNoun(player.Location.Name);
+        io.WriteMessageLine("");
+        io.WriteMessageLine(player.Location.Description);
+        io.WriteMessageLine("");
+        io.WriteMessageLine("Exits:");
+        foreach (var exit in player.Location.Exits)
         {
-            _io.WriteMessageLine($"You are carrying: {inventory.Name}");
+            io.WriteMessageLine($"{exit.Key} - {exit.Value.Description}");
+        }
+        io.WriteMessageLine("");
+        io.WriteMessageLine("Inventory:");
+        foreach (var item in player.Location.Inventory)
+        {
+            io.WriteMessageLine($"{item.Name} - {item.Description}");
+        }
+        io.WriteMessageLine("");
+        io.WriteMessageLine("Players:");
+        foreach (var p in player.Location.Players)
+        {
+            io.WriteMessageLine($"{p.Name}");
         }
 
-        return new CommandResult { IsHandled = true, RequestExit = false };
+        return new CommandResult { RequestExit = false, IsHandled = true };
     }
 }
